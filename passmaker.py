@@ -83,7 +83,7 @@ def passmaker():
             #begin write file
             fp = open(filename, "wb")
             for item in resultlist:
-                fp.writelines(item+'\n')
+                fp.writelines(item)
             fp.flush()
             resultlist = [] #每个规则处理完后要清空这个list
     return filename
