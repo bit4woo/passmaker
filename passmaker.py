@@ -5,10 +5,24 @@ __github__ = 'https://github.com/bit4woo'
 
 import config
 import inspect
-import leet
 import itertools
 import datetime
+import os
+import sys
+import logging
 
+def logger():
+    LOGGER = logging.getLogger("PassMakerLog")
+    LOGGER_HANDLER = logging.StreamHandler(sys.stdout)
+
+    FORMATTER = logging.Formatter("\r[%(asctime)s] [%(levelname)s] %(message)s", "%H:%M:%S")
+
+    LOGGER_HANDLER.setFormatter(FORMATTER)
+    LOGGER.addHandler(LOGGER_HANDLER)
+    LOGGER.setLevel(logging.INFO)
+
+    return LOGGER
+logger = logger()
 def getseedname():#获取所有list
     result = []
     for item in inspect.getmembers(config):
@@ -26,10 +40,11 @@ def getseedvalue(name):
 
 
 def passmaker():
+    logger.info("making password ...")
     now = datetime.datetime.now()
     timestr = now.strftime("-%Y-%m-%d-%H-%M")
-    filename = "passmaker+{}.txt".format(timestr)
-    fp = open(filename,"wb")
+    filename = "passmaker{}.txt".format(timestr)
+
     resultlist = []
     templist = []
     rulelist = []
@@ -39,26 +54,34 @@ def passmaker():
             y = len(x)
             z = itertools.permutations(x, y)#结构是list,
             rulelist = list(set(z))#一个规则变成了多个
-            print rulelist
+            #print rulelist
         else:
             rulelist.append(tuple(item.split("+")))
-            print rulelist
+            #print rulelist
 
         for item in rulelist: #item 是一个规则
             #print item
-            for i in item: #解析一个规则，i是seed,单个组成部分
-                if i in getseedname(): #seed 是否有在config中定义
-                    if len(resultlist) == 0:
-                        resultlist = getseedvalue(i)
+            try:
+                for i in item: #解析一个规则，i是seed,单个组成部分
+                    if i in getseedname(): #seed 是否有在config中定义
+                        if len(resultlist) == 0:
+                            resultlist = getseedvalue(i)
+                        else:
+                            for x in resultlist:
+                                for y in getseedvalue(i):
+                                    templist.append(x+y)
+                            #print resultlist
+                            resultlist = templist
+                            templist = []
                     else:
-                        for x in resultlist:
-                            for y in getseedvalue(i):
-                                templist.append(x+y)
-                        #print resultlist
-                        resultlist = templist
-                        templist = []
-                else:
-                    print "No \"{0}\" found in config.py,Please check".format(i)
+                        #print "No \"{0}\" found in config.py,Please check".format(i)
+                        raise Exception("No \"{0}\" found in config.py, Please check your config!".format(i))
+
+            except Exception,e:
+                print e
+                exit(0)
+            #begin write file
+            fp = open(filename, "wb")
             for item in resultlist:
                 fp.writelines(item+'\n')
             fp.flush()
@@ -68,6 +91,7 @@ def passmaker():
 
 
 def filter(string): #密码约束规则过滤
+
     specialchar = 1
     number = 2
     upperletter =4
@@ -105,6 +129,7 @@ def filter(string): #密码约束规则过滤
         return False
 
 def filter_file(filename):
+    logger.info("Doing filter base on the password requirements ...")
     tmplist = []
     fpr = open(filename, "r")  # 写句柄不能用于读
     for item in fpr.readlines():
@@ -118,6 +143,7 @@ def filter_file(filename):
     fpw.close()
 
 def caps(filename):
+    logger.info("Doing capitalize for all passwords have generated ...")
     tmplist = []
     fpr = open(filename, "r")  # 写句柄不能用于读
     # print fpr.readlines()
@@ -135,6 +161,7 @@ def caps(filename):
     fpw.close()
 
 def leetit(filename):
+    logger.info("Doing leet change for all passwords have generated ...")
     tmplist = []
     fpr = open(filename, "r")
     for item in fpr.readlines():
@@ -157,3 +184,4 @@ if __name__ == "__main__":
     if config.leet:
         leetit(filename)
     filter(filename)
+    logger.info("Password file: {}".format(os.path.join(os.getcwd(),filename)))

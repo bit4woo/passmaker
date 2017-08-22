@@ -8,12 +8,13 @@ __github__ = 'https://github.com/bit4woo'
 domain= ["wolaidai.com","wolaidai","welab","welab.com"]
 year = ["2016","2017","2018"]
 special_letter = ["!","@","#","$","%",]
-xxx = open('./seed/weak_password_top100.txt').readlines()
+common_weak_pass = open('./seed/weak_pass_top100.txt').readlines()
+keyboard_walk = open('./seed/4_keyboard_walk.txt').readlines()
 #domain_capitalize = False #域名首字母大写处理
 
 
 #第二步，定义密码的组成规则
-rule = ["domain+special_letter+year"]
+rule = ["domain+special_letter+year","domain+special_letter+keyboard_walk","domain+special_letter+common_weak_pass"]
 keep_in_order = False #以上的规则，是否保持原顺序，如果为False 将对每个规则中的seed进行排列组合后生产密码。
 
 
@@ -49,4 +50,4 @@ need_nummber = False
 kinds_needed = 3  #四者包含其三
 
 if __name__ =="__main__":
-    print type(xxx)
+    print type(common_weak_pass)
