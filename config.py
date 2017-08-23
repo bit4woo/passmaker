@@ -8,16 +8,14 @@ __github__ = 'https://github.com/bit4woo'
 domain= ["baidu.com","baidu","Baidu.com","BaiDu.com"]
 year = ["2016","2017","2018"]
 special_letter = ["!","@","#","$","%",]
-common_weak_pass = open('./seed/weak_pass_top100.txt').readlines()
-keyboard_walk = open('./seed/4_keyboard_walk.txt').readlines()
+keyboard_walk = open('./seed/2_years.txt').readlines()
 #domain_capitalize = False #域名首字母大写处理
 
 
 #第二步，定义密码的组成规则
-rule = ["domain+special_letter+year","domain+special_letter+keyboard_walk","domain+special_letter+common_weak_pass"]
+rule = ["domain+special_letter+year","domain+special_letter+keyboard_walk"]
 #domain+special_letter+year
-keep_in_order = False #以上的规则，是否保持原顺序，如果为False 将对每个规则中的seed进行排列组合后生产密码。
-
+keep_in_order = True #以上的规则，是否保持原顺序，如果为False 将对每个规则中的seed进行排列组合后生产密码。
 
 
 #第三步，对以上生成的密码再进行一些变形处理
@@ -40,8 +38,11 @@ leet2string ={
             "S" : "$",
             }
 
+#第四步，将一些常规的，可直接使用的密码字典合入最终的文件中。
 
-#第四步，根据以下密码规则约束，对以上生成的密码进行过滤处理，删除不满足条件的
+common_weak_pass_needed = ["weak_pass_chinese.txt","weak_pass_top100.txt"]
+
+#最后一步，根据以下密码规则约束，对以上生成的密码进行过滤处理，删除不满足条件的
 min_lenth =8
 need_upper_letter = False
 need_lower_letter = True

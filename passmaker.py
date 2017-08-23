@@ -150,6 +150,8 @@ def filter_file(filename):
         if filter(item.strip()):
             tmplist.append(item.strip())
 
+    tmplist = list(set(tmplist)) #去重
+
     fpw = open(filename, "wb")#这里要覆盖写入
     fpw.writelines("\n".join(tmplist))
     fpw.close()
@@ -178,6 +180,16 @@ def leetit(fp):
                 tmplist.append(leeted)
     write_add(filename,tmplist)
 
+def addpassworddict(filename):
+    logger.info("Adding common weak password to result ...")
+    tmplist = []
+    for item in config.common_weak_pass_needed:
+        file = "./dict/{}".format(item)
+        fp = open(file,"r")
+        for it in fp.readlines():
+            tmplist.append(it.strip("\n").strip("\r"))
+        write_add(filename,tmplist)
+
 
 if __name__ == "__main__":
     filename = passmaker()
@@ -185,5 +197,6 @@ if __name__ == "__main__":
         caps(filename)
     if config.leet:
         leetit(filename)
-    filter_file(filename)
+    addpassworddict(filename) # step 4
+    filter_file(filename) #final step
     logger.info("Password file: {}".format(os.path.join(os.getcwd(),filename)))
