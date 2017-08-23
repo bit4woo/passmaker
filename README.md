@@ -2,14 +2,13 @@
 
 ## 目的
 
-该脚本的主要目标是根据定制的规则来组合生成出密码字典，主要目标是针对企业，希望对安全人员自查“符合密码策略的若密码”有所帮助。
+该脚本的主要目标是根据定制的规则来组合生成出密码字典，主要目标是针对企业，希望对安全人员自查“符合密码策略的弱密码”有所帮助。
 
 ## 规则
 
 程序的核心是密码规则的指定，比如：
 
 - domain+常规弱密码
-
 - domain+键盘弱密码
 - domain+特殊字符+常规弱密码
 - domain+特殊字符+年份
@@ -24,7 +23,7 @@
 
 ```
 #第一步，定义种子（seed），密码的基本组成部分
-domain= ["wolaidai.com","wolaidai","welab","welab.com"]
+domain= ["baidu.com","baidu","Baidu.com","BaiDu.com"]
 year = ["2016","2017","2018"]
 special_letter = ["!","@","#","$","%",]
 common_weak_pass = open('./seed/weak_pass_top100.txt').readlines()

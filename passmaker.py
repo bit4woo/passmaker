@@ -23,6 +23,7 @@ def logger():
 
     return LOGGER
 logger = logger()
+
 def getseedname():#获取所有list
     result = []
     for item in inspect.getmembers(config):
@@ -34,10 +35,26 @@ def getseedname():#获取所有list
 
 def getseedvalue(name):
     for item in inspect.getmembers(config):
-        if name == item[0]:
-            #print item[1]
-            return item[1]
+        if name == item[0] and isinstance(item[1],list):
+            tmplist = []
+            for x in item[1]:
+                x= x.strip("\r")
+                x = x.strip("\n")
+                tmplist.append(x)
+            return tmplist
 
+
+def write_add(filename,write_list):
+    try:
+        fp = open(filename,"ab+")
+        if len(fp.readlines()) !=0:
+            fp.write("\n")
+        fp.writelines("\n".join(write_list))
+        fp.close()
+        return 0
+    except Exception,e:
+        logger.error(e)
+        return 1
 
 def passmaker():
     logger.info("making password ...")
@@ -81,10 +98,7 @@ def passmaker():
                 print e
                 exit(0)
             #begin write file
-            fp = open(filename, "wb")
-            for item in resultlist:
-                fp.writelines(item+'\n')
-            fp.flush()
+            write_add(filename,resultlist)
             resultlist = [] #每个规则处理完后要清空这个list
     return filename
 
@@ -134,12 +148,10 @@ def filter_file(filename):
     fpr = open(filename, "r")  # 写句柄不能用于读
     for item in fpr.readlines():
         if filter(item.strip()):
-            tmplist.append()
+            tmplist.append(item.strip())
 
     fpw = open(filename, "wb")#这里要覆盖写入
-    for item in tmplist:
-        fpw.write(item)
-    fpw.flush()
+    fpw.writelines("\n".join(tmplist))
     fpw.close()
 
 def caps(filename):
@@ -148,33 +160,23 @@ def caps(filename):
     fpr = open(filename, "r")  # 写句柄不能用于读
     # print fpr.readlines()
     for item in fpr.readlines():
-        x = item.capitalize()
-        if x != item:
+        x = item.strip().capitalize()
+        if x != item.strip():
             tmplist.append(x)
     fpr.close()
     # print tmplist
+    write_add(filename,tmplist)
 
-    fpw = open(filename, "a")
-    for item in tmplist:
-        fpw.write(item)
-    fpw.flush()
-    fpw.close()
-
-def leetit(filename):
+def leetit(fp):
     logger.info("Doing leet change for all passwords have generated ...")
     tmplist = []
     fpr = open(filename, "r")
     for item in fpr.readlines():
-        for x in item:
+        for x in item.strip():
             if x in config.leet2num.keys():
-                leeted = item.replace(x,dict[x])
+                leeted = item.strip().replace(x,dict[x])
                 tmplist.append(leeted)
-
-    fpw = open(filename, "a")
-    for item in tmplist:
-        fpw.write(item)
-    fpw.flush()
-    fpw.close()
+    write_add(filename,tmplist)
 
 
 if __name__ == "__main__":
@@ -183,5 +185,5 @@ if __name__ == "__main__":
         caps(filename)
     if config.leet:
         leetit(filename)
-    filter(filename)
+    filter_file(filename)
     logger.info("Password file: {}".format(os.path.join(os.getcwd(),filename)))

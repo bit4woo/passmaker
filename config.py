@@ -5,7 +5,7 @@ __github__ = 'https://github.com/bit4woo'
 
 
 #第一步，定义种子（seed），密码的基本组成部分,
-domain= ["wolaidai.com","wolaidai","welab","welab.com"]
+domain= ["baidu.com","baidu","Baidu.com","BaiDu.com"]
 year = ["2016","2017","2018"]
 special_letter = ["!","@","#","$","%",]
 common_weak_pass = open('./seed/weak_pass_top100.txt').readlines()
@@ -15,6 +15,7 @@ keyboard_walk = open('./seed/4_keyboard_walk.txt').readlines()
 
 #第二步，定义密码的组成规则
 rule = ["domain+special_letter+year","domain+special_letter+keyboard_walk","domain+special_letter+common_weak_pass"]
+#domain+special_letter+year
 keep_in_order = False #以上的规则，是否保持原顺序，如果为False 将对每个规则中的seed进行排列组合后生产密码。
 
 
