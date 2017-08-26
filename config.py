@@ -4,7 +4,7 @@ __author__ = 'bit4'
 __github__ = 'https://github.com/bit4woo'
 
 
-#第一步，定义种子（seed），密码的基本组成部分,
+#第一步，定义种子（seed），密码的基本组成部分，必须是字典类型
 domain= ["baidu.com","baidu","Baidu.com","BaiDu.com"]
 year = ["2016","2017","2018"]
 special_letter = ["!","@","#","$","%",]
@@ -12,7 +12,7 @@ keyboard_walk = open('./seed/2_years.txt').readlines()
 #domain_capitalize = False #域名首字母大写处理
 
 
-#第二步，定义密码的组成规则
+#第二步，定义密码的组成规则，这里用到的seed字段，都必须在第一步中定义好，而且是字典类型
 rule = ["domain+special_letter+year","domain+special_letter+keyboard_walk"]
 #domain+special_letter+year
 keep_in_order = True #以上的规则，是否保持原顺序，如果为False 将对每个规则中的seed进行排列组合后生产密码。
@@ -52,4 +52,4 @@ need_nummber = False
 kinds_needed = 3  #四者包含其三
 
 if __name__ =="__main__":
-    print type(common_weak_pass)
+    print type(keyboard_walk)
