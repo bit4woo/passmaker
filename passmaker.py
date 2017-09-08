@@ -60,7 +60,7 @@ def passmaker():
     logger.info("making password ...")
     now = datetime.datetime.now()
     timestr = now.strftime("-%Y-%m-%d-%H-%M")
-    filename = "passmaker{}.txt".format(timestr)
+    filename = "passmaker{0}.txt".format(timestr)
 
     resultlist = []
     templist = []
@@ -184,7 +184,7 @@ def addpassworddict(filename):
     logger.info("Adding common weak password to result ...")
     tmplist = []
     for item in config.common_weak_pass_needed:
-        file = "./dict/{}".format(item)
+        file = "./dict/{0}".format(item)
         fp = open(file,"r")
         for it in fp.readlines():
             tmplist.append(it.strip("\n").strip("\r"))
@@ -199,4 +199,4 @@ if __name__ == "__main__":
         leetit(filename)
     addpassworddict(filename) # step 4
     filter_file(filename) #final step
-    logger.info("Password file: {}".format(os.path.join(os.getcwd(),filename)))
+    logger.info("Password file: {0}".format(os.path.join(os.getcwd(),filename)))
