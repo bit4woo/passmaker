@@ -176,7 +176,7 @@ def leetit(fp):
     for item in fpr.readlines():
         for x in item.strip():
             if x in config.leet2num.keys():
-                leeted = item.strip().replace(x,dict[x])
+                leeted = item.strip().replace(x,config.leet2num[x])
                 tmplist.append(leeted)
     write_add(filename,tmplist)
 
