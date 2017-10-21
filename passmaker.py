@@ -10,6 +10,10 @@ import datetime
 import os
 import sys
 import logging
+import argparse
+import argcomplete
+from argparse import RawTextHelpFormatter
+
 
 def logger():
     LOGGER = logging.getLogger("PassMakerLog")
@@ -56,11 +60,14 @@ def write_add(filename,write_list):
         logger.error(e)
         return 1
 
-def passmaker():
+def passmaker(resultfile=None):
     logger.info("making password ...")
     now = datetime.datetime.now()
     timestr = now.strftime("-%Y-%m-%d-%H-%M")
-    filename = "passmaker{0}.txt".format(timestr)
+    if resultfile:
+        filename = resultfile
+    else:
+        filename = "passmaker{0}.txt".format(timestr)
 
     resultlist = []
     templist = []
@@ -191,8 +198,29 @@ def addpassworddict(filename):
         write_add(filename,tmplist)
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter, description= \
+        "Usage: python passmaker.py <OPTIONS> \n")
+
+    menu_group = parser.add_argument_group('Menu Options')
+
+    menu_group.add_argument('-o', '--output', help="password dict file", default=None)
+    menu_group.add_argument('-i', '--interactive', help="interactive mode", default=False)
+
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args()
+
+    return args
+
+
 if __name__ == "__main__":
-    filename = passmaker()
+    args = parse_args()
+    if args.interactive ==True:
+        pass
+    if args.output:
+        filename = passmaker(args.output)
+    else:
+        filename = passmaker()
     if config.capitalize:
         caps(filename)
     if config.leet:
