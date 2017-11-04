@@ -199,6 +199,7 @@ def addpassworddict(filename):
 
 
 def parse_args():
+    print "You can use -i option to use interactive mode"
     parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter, description= \
         "Usage: python passmaker.py <OPTIONS> \n")
 
