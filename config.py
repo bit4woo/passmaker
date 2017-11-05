@@ -14,7 +14,6 @@ common_number = open('./seed/common_number.txt').readlines()
 chinese_last_name = open('./seed/Chinese_last_name_top100.txt').readlines()
 common_english_name = open('./seed/english_name.txt').readlines()
 x=['.']
-#domain_capitalize = False #域名首字母大写处理
 
 
 #第二步，定义密码的组成规则，这里用到的seed字段，都必须在第一步中定义好，而且是字典类型
