@@ -151,7 +151,7 @@ class interactive():
                         break
 
             elif step_choice == "5": #filter
-                print ("Enable the filter rules to clean result?(Yes/No)\n")
+                print ("Enable the filter rules to clean result?(Yes/no)\n")
                 while True:
                     filter_input = raw_input("==>")
                     if filter_input.lower() in ["no","n"]:
@@ -216,5 +216,5 @@ class interactive():
 if __name__ == "__main__":
     x = interactive()
     #x.print_paras()
-    x.interactive()
+    print x.interactive()
     #x.print_paras()
