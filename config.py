@@ -5,21 +5,18 @@ __github__ = 'https://github.com/bit4woo'
 
 
 #第一步，定义种子（seed），密码的基本组成部分，必须是字典类型
-domain= ["pingan.com","pingan","pingan.com.cn","pa"]
-topic = ["jiankang","yiliao","yljk","jk","yl"]
+domain= ["baidu.com","badidu"]
 year = ["2015","2016","2017"]
 special_letter = ["!","@","#","$","%",]
 keyboard_walk = open('./seed/4_keyboard_walk.txt').readlines()
 common_number = open('./seed/common_number.txt').readlines()
 chinese_last_name = open('./seed/Chinese_last_name_top100.txt').readlines()
 common_english_name = open('./seed/english_name.txt').readlines()
-x=['.']
 
 
 #第二步，定义密码的组成规则，这里用到的seed字段，都必须在第一步中定义好，而且是字典类型
-#rule = ["domain+special_letter+year","domain+special_letter+keyboard_walk","domain+special_letter+common_number","domain+year","topic+special_letter+year","topic+special_letter+keyboard_walk","topic+special_letter+common_number","topic+year"]
-rule_list = ["common_english_name+x+chinese_last_name"]
-#domain+special_letter+year
+#rule_list = ["domain+special_letter+year","domain+special_letter+keyboard_walk","domain+special_letter+common_number","domain+year","topic+special_letter+year","topic+special_letter+keyboard_walk","topic+special_letter+common_number","topic+year"]
+rule_list = ["domain+special_letter+year"]
 keep_in_order = True #以上的规则，是否保持原顺序，如果为False 将对每个规则中的seed进行排列组合后生产密码。
 
 

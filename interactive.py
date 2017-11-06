@@ -8,12 +8,20 @@ import glob
 import colorama
 import os.path
 
-class colors:
-    colorama.init()
-    white = colorama.Fore.WHITE
-    red = colorama.Fore.RED
-    blue = colorama.Fore.BLUE
-    green = colorama.Fore.GREEN
+class color:
+    def __init__(self):
+        colorama.init()
+        self.white = colorama.Fore.WHITE
+        self.red = colorama.Fore.RED
+        self.blue = colorama.Fore.BLUE
+        self.green = colorama.Fore.GREEN
+        self.yellow = colorama.Fore.YELLOW  # yellow
+        self.lightwhite = colorama.Fore.LIGHTWHITE_EX
+        self.lightred = colorama.Fore.LIGHTRED_EX
+        self.lightblue = colorama.Fore.LIGHTBLUE_EX
+        self.lightgreen = colorama.Fore.LIGHTGREEN_EX
+        self.lightyellow = colorama.Fore.LIGHTYELLOW_EX
+color = color()
 
 class tabCompleter(object):
 
@@ -51,7 +59,7 @@ class interactive():
         readline.set_completer_delims('\t')
         readline.parse_and_bind("tab: complete")
         readline.set_completer(t.pathCompleter)
-        print colors.white + "\nWelcome to interactive mode!\n\nNotice: you can input BACK to back to upper menu in each step."
+        print color.green + "\nWelcome to interactive mode!\n\nNotice: you can input BACK to back to upper menu in each step."
         index = '''
         1.Step one: define the seed
         2.Step two: define the rule that to combine the seed
@@ -72,7 +80,7 @@ class interactive():
                         break
                     elif seed_input == "":
                         continue
-                    else:
+                    elif "=" in seed_input:
                         key = seed_input.split('=')[0].strip()
                         value = seed_input.split('=')[1].strip()
                         if "file(" in value:
@@ -81,6 +89,8 @@ class interactive():
                         else:
                             value_list = value.split(',')
                         self.seed_map[key] = value_list
+                    else:
+                        continue
             elif step_choice == "2":
                 print("Please input your rule,only can use seeds already defined in step one.\n"
                       "Example :\n"
