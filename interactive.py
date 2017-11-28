@@ -63,13 +63,13 @@ class interactive():
         index = '''
         1.Step one: define the seed
         2.Step two: define the rule that to combine the seed
-        3.Step three: whether to leet or caps the result[default both is False]
-        4.Step four: add exist list to the result[default is None]
-        5.Step five: define the filter to clean result
+        3.Step three: whether to leet or caps the result [default both is False]
+        4.Step four: add exist list to the result [default is None]
+        5.Step five: define the filter to clean result [default Not to filte]
         6.Print current config vulues
-        7.Exit/back
+        7.Exit/back/run
         '''
-
+        basedir = os.path.dirname(__file__)
         while True:
             step_choice = raw_input(index)
             if step_choice == "1":
@@ -85,7 +85,15 @@ class interactive():
                         value = seed_input.split('=')[1].strip()
                         if "file(" in value:
                             file_name = value.replace("file(","").strip(')')
-                            value_list = open(file_name,"r").readlines()
+                            try:
+                                value_list = open(file_name,"r").readlines()
+                            except:
+                                file_name = os.path.join(basedir,"seed",file_name)
+                                try:
+                                    value_list = open(file_name, "r").readlines()
+                                except:
+                                    print "File Not Found!"
+                                    continue
                         else:
                             value_list = value.split(',')
                         self.seed_map[key] = value_list
@@ -96,6 +104,18 @@ class interactive():
                       "Example :\n"
                       "domain+year,domain")
                 print("already defined seeds: {0}".format(self.seed_map.keys()))
+                def check_rule(rule_list):
+                    tmp =[]
+                    for item in self.rule_list:
+                        for x in item.split("+"):
+                            if x.strip() not in self.seed_map.keys():
+                                tmp.append(x.strip)
+                                print "{0} is not in seeds,Please check".format(x.strip())
+                    if len(tmp) == 0:
+                        return  True
+                    else:
+                        print "{0} is not in seeds,Please check and input again".format(tmp)
+                        return False
                 while True:
                     rule_input = raw_input("==>")
                     if rule_input.lower() == "back":
@@ -104,7 +124,11 @@ class interactive():
                         continue
                     else:
                         self.rule_list = rule_input.split(',')
-                        break
+                        if check_rule(self.rule_list):# true = check pass
+                            break
+                        else:
+                            continue
+
                 while True:
                     order_input = raw_input("whether to keep the seed in order when combine?(Y/n)\n==>")
                     if order_input.lower() == "back":
@@ -157,6 +181,9 @@ class interactive():
                         files = addtionalitem_input.strip().split(',')
                         for file in files:
                             if os.path.isfile(file.strip()):
+                                self.addtional_list.append(file)
+                            else:
+                                file = os.path.join(basedir,"dict",file.strip())
                                 self.addtional_list.append(file)
                         break
 
@@ -217,7 +244,7 @@ class interactive():
 
             elif step_choice.lower() in ["6","print"]:
                 self.print_paras()
-            elif step_choice.lower() in ["7","exit","back"] :
+            elif step_choice.lower() in ["7","exit","back","run"] :
                 break
             else:
                 continue

@@ -24,7 +24,7 @@ def parse_args():
     menu_group = parser.add_argument_group('Menu Options')
 
     menu_group.add_argument('-o', '--output', help="password dict file", default=None)
-    menu_group.add_argument('-i', '--interactive', help="interactive mode",action='store_true',default=True)
+    menu_group.add_argument('-i', '--interactive', help="interactive mode",action='store_true',default=False)
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
