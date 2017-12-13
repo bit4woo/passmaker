@@ -8,8 +8,7 @@ import inspect
 import itertools
 import datetime
 import os
-import sys
-import logging
+from lib.common import logger
 import argparse
 import argcomplete
 import interactive
@@ -25,22 +24,12 @@ def parse_args():
 
     menu_group.add_argument('-o', '--output', help="password dict file", default=None)
     menu_group.add_argument('-i', '--interactive', help="interactive mode",action='store_true',default=False)
+    menu_group.add_argument('-g', '--gui', help="GUI mode", action='store_true', default=True)
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
 
     return args
-
-def logger():
-    LOGGER = logging.getLogger("PassMakerLog")
-    LOGGER_HANDLER = logging.StreamHandler(sys.stdout)
-
-    FORMATTER = logging.Formatter("\r[%(asctime)s] [%(levelname)s] %(message)s", "%H:%M:%S")
-
-    LOGGER_HANDLER.setFormatter(FORMATTER)
-    LOGGER.addHandler(LOGGER_HANDLER)
-    LOGGER.setLevel(logging.INFO)
-    return LOGGER
 
 def getseedname():#获取所有list
     result = []
