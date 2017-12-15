@@ -7,6 +7,7 @@ import readline
 import glob
 import colorama
 import os.path
+from lib.paras import paras
 
 class color:
     def __init__(self):
@@ -41,7 +42,7 @@ class interactive():
         self.leet = False  # for step three
         self.capitalize = False
 
-        self.addtional_list = []  # for step 4  list of file
+        self.additional_list = []  # for step 4  list of file
 
         self.enable_filter = False  # for step 5
         self.min_lenth = 8
@@ -96,19 +97,20 @@ class interactive():
                                     continue
                         else:
                             value_list = value.split(',')
-                        self.seed_map[key] = value_list
+                        #self.seed_map[key] = value_list
+                        paras.seed_map[key] = value_list
                     else:
                         continue
             elif step_choice == "2":
                 print("Please input your rule,only can use seeds already defined in step one.\n"
                       "Example :\n"
                       "domain+year,domain")
-                print("already defined seeds: {0}".format(self.seed_map.keys()))
+                print("already defined seeds: {0}".format(paras.seed_map.keys()))
                 def check_rule(rule_list):
                     tmp =[]
-                    for item in self.rule_list:
+                    for item in paras.rule_list:
                         for x in item.split("+"):
-                            if x.strip() not in self.seed_map.keys():
+                            if x.strip() not in paras.seed_map.keys():
                                 tmp.append(x.strip)
                                 print "{0} is not in seeds,Please check".format(x.strip())
                     if len(tmp) == 0:
@@ -123,8 +125,8 @@ class interactive():
                     elif rule_input == "":
                         continue
                     else:
-                        self.rule_list = rule_input.split(',')
-                        if check_rule(self.rule_list):# true = check pass
+                        paras.rule_list = rule_input.split(',')
+                        if check_rule(paras.rule_list):# true = check pass
                             break
                         else:
                             continue
@@ -134,10 +136,10 @@ class interactive():
                     if order_input.lower() == "back":
                         break
                     elif order_input.lower() in ["","y","yes"]:
-                        self.keep_in_order = True
+                        paras.keep_in_order = True
                         break
                     elif order_input.lower() in ["no","n"]:
-                        self.keep_in_order = False
+                        paras.keep_in_order = False
                         break
                     else:
                         continue
@@ -148,18 +150,18 @@ class interactive():
                 while True:
                     leet_input = raw_input("==>")
                     if leet_input.lower() in ["",'none',"n"]:
-                        self.capitalize = False
-                        self.leet = False
+                        paras.capitalize = False
+                        paras.leet = False
                         break
                     elif leet_input.lower() == 'leet':
-                        self.leet = True
+                        paras.leet = True
                         break
                     elif leet_input.lower() == 'caps':
-                        self.capitalize = True
+                        paras.capitalize = True
                         break
                     elif leet_input.lower() == 'both':
-                        self.capitalize = True
-                        self.leet = True
+                        paras.capitalize = True
+                        paras.leet = True
                         break
                     elif leet_input.lower() == 'back':
                         break
@@ -181,10 +183,10 @@ class interactive():
                         files = addtionalitem_input.strip().split(',')
                         for file in files:
                             if os.path.isfile(file.strip()):
-                                self.addtional_list.append(file)
+                                paras.additional_list.append(file)
                             else:
                                 file = os.path.join(basedir,"dict",file.strip())
-                                self.addtional_list.append(file)
+                                paras.additional_list.append(file)
                         break
 
             elif step_choice == "5": #filter
@@ -192,10 +194,10 @@ class interactive():
                 while True:
                     filter_input = raw_input("==>")
                     if filter_input.lower() in ["no","n"]:
-                        self.enable_filter = False
+                        paras.enable_filter = False
                         break
                     elif filter_input.lower() in ["","y","yes"]:
-                        self.enable_filter = True
+                        paras.enable_filter = True
 
 
 
@@ -203,19 +205,19 @@ class interactive():
                         while True:
                             filter_options = raw_input("==>")
                             try:
-                                self.min_lenth = int(filter_options)
+                                paras.min_lenth = int(filter_options)
                                 break
                             except:
                                 continue
 
-                        for item in self.filter_rule.keys():
-                            print ("Please chose whether must contains:[{0}] ?({1})\n".format(item,'True/false' if self.filter_rule[item] else 'False/true'))
+                        for item in paras.filter_rule.keys():
+                            print ("Please chose whether must contains:[{0}] ?({1})\n".format(item,'True/false' if paras.filter_rule[item] else 'False/true'))
                             filter_options = raw_input("==>")
                             if filter_options.lower() in ["t","true"]:
-                                self.filter_rule[item] = True
+                                paras.filter_rule[item] = True
                                 break
                             elif filter_options.lower() in ["f","false"]:
-                                self.filter_rule[item] = False
+                                paras.filter_rule[item] = False
                                 break
                             elif filter_options == "":
                                 pass
@@ -230,7 +232,7 @@ class interactive():
                             try:
                                 x = int(filter_options)
                                 if 0<= x <= 4:
-                                    self.kinds_needed = x
+                                    paras.kinds_needed = x
                                     break
                                 else:
                                     continue
@@ -248,9 +250,10 @@ class interactive():
                 break
             else:
                 continue
-        return self.__dict__
+        return paras
 
 if __name__ == "__main__":
+    print paras
     x = interactive()
     #x.print_paras()
     print x.interactive()

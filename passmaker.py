@@ -8,15 +8,15 @@ import inspect
 import itertools
 import datetime
 import os
-from lib.common import logger
 import argparse
 import argcomplete
 import interactive
+import GUI
 from argparse import RawTextHelpFormatter
-
+from lib.paras import paras
+from lib.common import logger
 
 def parse_args():
-    print "You can use -i option to use interactive mode"
     parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter, description= \
         "Usage: python passmaker.py <OPTIONS> \n")
 
@@ -24,7 +24,7 @@ def parse_args():
 
     menu_group.add_argument('-o', '--output', help="password dict file", default=None)
     menu_group.add_argument('-i', '--interactive', help="interactive mode",action='store_true',default=False)
-    menu_group.add_argument('-g', '--gui', help="GUI mode", action='store_true', default=True)
+    menu_group.add_argument('-g', '--gui', help="GUI mode", action='store_true', default=False)
 
     argcomplete.autocomplete(parser)
     args = parser.parse_args()
@@ -51,30 +51,9 @@ def getseedvalue(name):
             return tmplist
 
 class passmaker():
-    def __init__(self,isinteractive= False,output_file= None):
+    def __init__(self,isinteractive= False,isGUI = True, output_file= None):
         self.logger = logger()
         self.output_file = output_file
-        if isinteractive:
-            config_para = interactive.interactive().interactive()
-            for item in config_para:
-                setattr(self, item, config_para[item])
-        else:
-            self.seed_map = {}
-            for item in getseedname():  # for step one
-                self.seed_map[item] = getseedvalue(item)
-
-            self.rule_list = config.rule_list  # for step two
-            self.keep_in_order = config.keep_in_order
-
-            self.leet = config.leet  # for step three
-            self.capitalize = config.capitalize
-
-            self.addtional_list = config.addtional_list  # for step 4  list of file
-
-            self.enable_filter = config.enable_filter  # for step 5
-            self.min_lenth = config.min_lenth
-            self.filter_rule = config.filter_rule
-            self.kinds_needed = config.kinds_needed  # 四者包含其三
 
     def write_add(self,filename,write_list):
         try:
@@ -89,7 +68,7 @@ class passmaker():
             return 1
 
     def passmaker(self): # first step and two ,combine base on the rules.
-        self.logger.info("making password base one the rule...")
+        self.logger.info("making password base on the rule...")
         now = datetime.datetime.now()
         timestr = now.strftime("-%Y-%m-%d-%H-%M")
         if self.output_file:
@@ -100,8 +79,8 @@ class passmaker():
         resultlist = []
         templist = []
         rulelist = []
-        for item in self.rule_list: #所有规则
-            if self.keep_in_order == False:
+        for item in paras.rule_list: #所有规则
+            if paras.keep_in_order == False:
                 x = item.split("+")
                 y = len(x)
                 z = itertools.permutations(x, y)#结构是list,
@@ -115,20 +94,19 @@ class passmaker():
                 #print item
                 try:
                     for i in item: #解析一个规则，i是seed,单个组成部分
-                        if i in self.seed_map: #seed 是否有在config中定义
+                        if i in paras.seed_map: #seed 是否有在config中定义
                             if len(resultlist) == 0:
-                                resultlist = self.seed_map[i]
+                                resultlist = paras.seed_map[i]
                             else:
                                 for x in resultlist:
-                                    for y in self.seed_map[i]:
+                                    for y in paras.seed_map[i]:
                                         y = y.strip()
                                         templist.append(x+y)
                                 #print resultlist
                                 resultlist = templist
                                 templist = []
                         else:
-                            #print "No \"{0}\" found in config.py,Please check".format(i)
-                            raise Exception("No \"{0}\" found in config.py, Please check your config!".format(i))
+                            raise Exception("No \"{0}\" found, Please check your config!".format(i))
 
                 except Exception,e:
                     print e
@@ -137,8 +115,6 @@ class passmaker():
                 self.write_add(filename,resultlist)
                 resultlist = [] #每个规则处理完后要清空这个list
         return filename
-
-
 
     def filter(self,string): #密码约束规则过滤
 
@@ -164,16 +140,16 @@ class passmaker():
                 flag += lowerletter
                 kind += 1
 
-        if self.filter_rule["Nummber"]:
+        if paras.filter_rule["Nummber"]:
             FLAG += number
-        if self.filter_rule["Upper_letter"]:
+        if paras.filter_rule["Upper_letter"]:
             FLAG += upperletter
-        if self.filter_rule["Lower_letter"]:
+        if paras.filter_rule["Lower_letter"]:
             FLAG += lowerletter
-        if self.filter_rule["Special_char"]:
+        if paras.filter_rule["Special_char"]:
             FLAG += specialchar
 
-        if len(string)>= self.min_lenth and kind >= self.kinds_needed and  (FLAG & flag == FLAG):
+        if len(string)>= paras.min_lenth and kind >= paras.kinds_needed and  (FLAG & flag == FLAG):
             return True
         else:
             return False
@@ -214,45 +190,69 @@ class passmaker():
         fpr = open(filename, "r")
         for item in fpr.readlines():
             for x in item.strip():
-                if x in config.leet2num.keys():
-                    leeted = item.strip().replace(x,config.leet2num[x])
+                if x in paras.leet_rule.keys():
+                    leeted = item.strip().replace(x,paras.leet_rule[x])
                     tmplist.append(leeted)
         self.write_add(filename,tmplist)
 
     def addpassworddict(self,filename): #step five
         self.logger.info("Adding common weak password to result ...")
         tmplist = []
-        for item in self.addtional_list:
+        for item in paras.additional_list:
             if os.path.isfile(item):
                 fp = open(item,"r")
                 for it in fp.readlines():
                     tmplist.append(it.strip("\n").strip("\r"))
                 self.write_add(filename,tmplist)
     def run(self):
-        if self.seed_map.keys()>=2 and len(self.rule_list) >=1:
+        if paras.seed_map.keys()>=2 and len(paras.rule_list) >=1:
             file = self.passmaker()
-            if self.capitalize:
+            if paras.capitalize:
                 self.caps(file)
             else:
                 self.logger.info("CAPS = False. Skip this step ...")
-            if self.leet:
+            if paras.leet:
                 self.leetit(file)
             else:
                 self.logger.info("Leet = False. Skip this step ...")
             self.addpassworddict(file)
-            if self.enable_filter:
+            if paras.enable_filter:
                 self.filter_file(file)
             else:
                 self.logger.info("Filter disabled. Skip this step...")
             return file
         else:
-            self.logger.info("Config Not complete ... Program Terminated.")
+            self.logger.info("Config Not complete ...Please check and run again")
             return None
 
 
 if __name__ == "__main__":
     args = parse_args()
-    pm = passmaker(args.interactive,args.output) #实例化对象
-    filename = pm.run()
-    if filename:
-        logger().info("Password file: {0}".format(os.path.join(os.getcwd(),filename)))
+    if args.interactive:
+        interactive.interactive().interactive()
+        filename = passmaker().run()
+        if filename:
+            logger().info("Password file: {0}".format(os.path.join(os.getcwd(), filename)))
+    elif args.gui:
+        GUI.GUI()
+    else:
+        paras.seed_map = {}
+        for item in getseedname():  # for step one
+            paras.seed_map[item] = getseedvalue(item)
+
+        paras.rule_list = config.rule_list  # for step two
+        paras.keep_in_order = config.keep_in_order
+
+        paras.leet = config.leet  # for step three
+        paras.capitalize = config.capitalize
+
+        paras.additional_list = config.additional_list  # for step 4  list of file
+
+        paras.enable_filter = config.enable_filter  # for step 5
+        paras.min_lenth = config.min_lenth
+        paras.filter_rule = config.filter_rule
+        paras.kinds_needed = config.kinds_needed  # 四者包含其三
+
+        filename = passmaker().run()
+        if filename:
+            logger().info("Password file: {0}".format(os.path.join(os.getcwd(),filename)))

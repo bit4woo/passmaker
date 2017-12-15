@@ -14,6 +14,7 @@ chinese_last_name = open('./seed/Chinese_last_name_top100.txt').readlines()
 common_english_name = open('./seed/english_name.txt').readlines()
 
 
+
 #第二步，定义密码的组成规则，这里用到的seed字段，都必须在第一步中定义好，而且是字典类型
 #rule_list = ["domain+special_letter+year","domain+special_letter+keyboard_walk","domain+special_letter+common_number","domain+year","topic+special_letter+year","topic+special_letter+keyboard_walk","topic+special_letter+common_number","topic+year"]
 rule_list = ["domain+special_letter+year"]
@@ -39,9 +40,9 @@ leet2string ={
             "W" : "\/\/",
             "S" : "$",
             }
-
+leet_rule = leet2num
 #第四步，将一些常规的，可直接使用的密码字典合入最终的文件中。
-addtional_list = ["weak_pass_chinese.txt","weak_pass_top100.txt"]
+additional_list = ["weak_pass_chinese.txt","weak_pass_top100.txt"]
 
 #最后一步，根据以下密码规则约束，对以上生成的密码进行过滤处理，删除不满足条件的
 #大写字母、小写字母、特殊符号、数字,四种包含三种---常见的密码要求
