@@ -51,12 +51,12 @@ class GUI():
             if key != "" and value != "":
                 paras.seed_map[key] = value_list
                 show_seeds()
-                self.logger.info("seed {0} added".format(key + ":" + value_list))
+                self.logger.info("seed {0} : {1}added".format(key,value_list))
 
         def delseed():
             try:
                 x = listb.selection_get()
-                key = x.split(":")[0]
+                key = x.split(":")[0].strip()
                 value = x.split(":")[1]
                 paras.seed_map.pop(key)
                 show_seeds()
@@ -67,10 +67,10 @@ class GUI():
         def editseed():
             try:
                 x = listb.selection_get()
-                key = x.split(":")[0]
+                key = x.split(":")[0].strip()
                 value = paras.seed_map[key]
                 seed_name.set(key)
-                seed_value.set(value)
+                seed_value.set(",".join(value))
                 paras.seed_map.pop(key)
                 show_seeds()
                 self.logger.info("Editing seed {0} ".format(key))
@@ -82,7 +82,7 @@ class GUI():
             try:
                 tmplist = open(filename, "r").readlines()
                 tmplist = strip_list(tmplist)
-                seed_value.set(tmplist)
+                seed_value.set(",".join(tmplist))
             except:
                 print('Could not open File:%s' % filename)
 

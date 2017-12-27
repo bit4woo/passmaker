@@ -10,6 +10,7 @@ paras = AttribDict()
 paras.seed_map = {}
 paras.seed_map["year"] = ["2016","2017","2018"]
 paras.seed_map["domain"] = ["baidu.com","badidu","Baidu.com","bd"]
+paras.seed_map["specialchar"] = ["!","@","#","$","%","^","&","*","(",")",]
 
 paras.rule_list = []
 paras.rule_list.append("domain+year")
