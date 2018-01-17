@@ -1,2 +1,3 @@
 pyreadline
 argcomplete
+colorama

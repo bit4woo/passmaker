@@ -6,7 +6,7 @@ __github__ = 'https://github.com/bit4woo'
 from Tkinter import *
 from lib.common import logger,strip_list
 from lib.paras import paras
-from tkinter import filedialog
+import tkFileDialog
 import passmaker
 import os
 
@@ -78,7 +78,7 @@ class GUI():
                 self.logger.error(e)
 
         def chosefile():
-            filename = filedialog.askopenfilename(filetypes=[('txt', '*.txt')])
+            filename = tkFileDialog.askopenfilename(filetypes=[('txt', '*.txt')])
             try:
                 tmplist = open(filename, "r").readlines()
                 tmplist = strip_list(tmplist)
@@ -250,7 +250,7 @@ class GUI():
                 self.logger.error(e)
 
         def chosefile():
-            filename = filedialog.askopenfilename(filetypes=[('txt', '*.txt')])
+            filename = tkFileDialog.askopenfilename(filetypes=[('txt', '*.txt')])
             try:
                 tmplist = open(filename, "r").readlines()
                 tmplist = strip_list(tmplist)
@@ -307,7 +307,7 @@ class GUI():
                 self.logger.error(e)
 
         def chosefile():
-            filename = filedialog.askopenfilename(filetypes=[('txt', '*.txt')])
+            filename = tkFileDialog.askopenfilename(filetypes=[('txt', '*.txt')])
             try:
                 if filename not in paras.additional_list:
                     paras.additional_list.append(filename)
@@ -412,7 +412,7 @@ class GUI():
                 listb.insert(0, item)
 
         def savetofile():
-            name = filedialog.asksaveasfile(mode='w', defaultextension=".txt")
+            name = tkFileDialog.asksaveasfile(mode='w', defaultextension=".txt")
             try:
                 name.writelines(self.result)
             except:
