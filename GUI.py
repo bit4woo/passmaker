@@ -1,6 +1,6 @@
 # !/usr/bin/env python
 # -*- coding:utf-8 -*-
-__author__ = 'bit4'
+__author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 
 from Tkinter import *
@@ -497,7 +497,7 @@ class GUI():
 
     def createWidgets(self):
         root = Tk()                     # 创建窗口对象的背景色
-        root.title("passmaker by bit4")    # 设置窗口标题
+        root.title("passmaker by bit4woo")    # 设置窗口标题
         root.geometry()    # 设置窗口大小 注意：是x 不是*
         root.resizable(width=True, height=True) # 设置窗口是否可以变化长/宽，False不可变，True可变，默认为True
         self.showStepFrame(root)
