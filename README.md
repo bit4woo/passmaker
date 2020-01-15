@@ -20,6 +20,18 @@
 
 ## 0x2、使用
 
+下载项目源码
+
+```
+git clone https://github.com/bit4woo/passmaker
+cd passmaker
+python passmaker.py #方法一，需先修改配置文件，要求一定的python基础知识
+python passmaker.py -i #方法二，命令行交互方式
+python passmaker.py -g #方法三，通过图形界面方式，MAC OS下可能会有问题
+```
+
+
+
 #### **方法一：通过config.py**
 
 通过修改config.py中的参数，然后直接运行`python passmaker.py`来生成密码字典。
@@ -95,6 +107,6 @@ kinds_needed = 3  # 四者包含其三
 
 ### 0x3、作者
 
-[bit4](https://github.com/bit4woo)
+[bit4woo](https://github.com/bit4woo)
 
 如果有好的建议，欢迎通过issue提交给我，谢谢！
