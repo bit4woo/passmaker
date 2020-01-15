@@ -50,6 +50,24 @@ def getseedvalue(name):
                 tmplist.append(x)
             return tmplist
 
+def config2Paras():
+    paras.seed_map = {}
+    for item in getseedname():  # for step one
+        paras.seed_map[item] = getseedvalue(item)
+
+    paras.rule_list = config.rule_list  # for step two
+    paras.keep_in_order = config.keep_in_order
+
+    paras.leet = config.leet  # for step three
+    paras.capitalize = config.capitalize
+
+    paras.additional_list = config.additional_list  # for step 4  list of file
+
+    paras.enable_filter = config.enable_filter  # for step 5
+    paras.min_lenth = config.min_lenth
+    paras.filter_rule = config.filter_rule
+    paras.kinds_needed = config.kinds_needed  # 四者包含其三
+
 class passmaker():
     def __init__(self,isinteractive= False,isGUI = True, output_file= None):
         self.logger = logger()
@@ -74,7 +92,7 @@ class passmaker():
         if self.output_file:
             filename = self.output_file
         else:
-            filename = "passmaker{0}.txt".format(timestr)
+            filename = os.path.join("output","passmaker{0}.txt".format(timestr))
 
         resultlist = []
         templist = []
@@ -236,23 +254,7 @@ if __name__ == "__main__":
     elif args.gui:
         GUI.GUI()
     else:
-        paras.seed_map = {}
-        for item in getseedname():  # for step one
-            paras.seed_map[item] = getseedvalue(item)
-
-        paras.rule_list = config.rule_list  # for step two
-        paras.keep_in_order = config.keep_in_order
-
-        paras.leet = config.leet  # for step three
-        paras.capitalize = config.capitalize
-
-        paras.additional_list = config.additional_list  # for step 4  list of file
-
-        paras.enable_filter = config.enable_filter  # for step 5
-        paras.min_lenth = config.min_lenth
-        paras.filter_rule = config.filter_rule
-        paras.kinds_needed = config.kinds_needed  # 四者包含其三
-
+        config2Paras()
         filename = passmaker().run()
         if filename:
             logger().info("Password file: {0}".format(os.path.join(os.getcwd(),filename)))
