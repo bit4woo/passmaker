@@ -90,30 +90,30 @@ class passmaker():
                 rulelist.append(tuple(item.split("+")))
                 #print rulelist
 
-            for item in rulelist: #item 是一个规则,类型是元组
-                #print item
-                try:
-                    for i in item: #解析一个规则，i是seed,单个组成部分
-                        if i in paras.seed_map: #seed 是否有在config中定义
-                            if len(resultlist) == 0:
-                                resultlist = paras.seed_map[i]
-                            else:
-                                for x in resultlist:
-                                    for y in paras.seed_map[i]:
-                                        y = y.strip()
-                                        templist.append(x+y)
-                                #print resultlist
-                                resultlist = templist
-                                templist = []
+        for item in rulelist: #item 是一个规则,类型是元组
+            #print item
+            try:
+                for i in item: #解析一个规则，i是seed,单个组成部分
+                    if i in paras.seed_map: #seed 是否有在config中定义
+                        if len(resultlist) == 0:
+                            resultlist = paras.seed_map[i]
                         else:
-                            raise Exception("No \"{0}\" found, Please check your config!".format(i))
+                            for x in resultlist:
+                                for y in paras.seed_map[i]:
+                                    y = y.strip()
+                                    templist.append(x+y)
+                            #print resultlist
+                            resultlist = templist
+                            templist = []
+                    else:
+                        raise Exception("No \"{0}\" found, Please check your config!".format(i))
 
-                except Exception,e:
-                    print e
-                    exit(0)
-                #begin write file
-                self.write_add(filename,resultlist)
-                resultlist = [] #每个规则处理完后要清空这个list
+            except Exception,e:
+                print e
+                exit(0)
+            #begin write file
+            self.write_add(filename,resultlist)
+            resultlist = [] #每个规则处理完后要清空这个list
         return filename
 
     def filter(self,string): #密码约束规则过滤
