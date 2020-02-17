@@ -381,7 +381,7 @@ class GUI():
         def setNumber():
             paras.filter_rule["Nummber"] = Nummber.get()
         Nummber = BooleanVar()
-        Num= Checkbutton(step5frame, text="Need Special Char in password", variable=Nummber,command = setNumber)
+        Num= Checkbutton(step5frame, text="Need Number in password", variable=Nummber,command = setNumber)
         Nummber.set(paras.filter_rule["Nummber"])
         Num.grid(row=3, column=1)
 

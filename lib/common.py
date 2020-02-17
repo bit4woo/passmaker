@@ -26,3 +26,35 @@ def strip_list(inputlist):
         return resultlist
     else:
         print "The input should be a list"
+
+def hasSpecialchar(string):
+    if string is None or len(string) == 0:
+        return False
+    for x in string:
+        if 32 <= ord(x) <= 47 or 58 <= ord(x) <= 64 or 91 <= ord(x) <= 96 or 123 <= ord(x) <= 126:  # 特殊字符
+            return True
+    return False
+
+def hasNumber(string):
+    if string is None or len(string) == 0:
+        return False
+    for x in string:
+        if 48 <= ord(x) <= 57:  # 数字
+            return True
+    return False
+
+def hasUpperletter(string):
+    if string is None or len(string) == 0:
+        return False
+    for x in string:
+        if 65 <= ord(x) <= 90:  # 大写字母
+            return True
+    return False
+
+def hasLowerletter(string):
+    if string is None or len(string) == 0:
+        return False
+    for x in string:
+        if 97 <= ord(x) <= 122:  # 小写字母
+            return True
+    return False

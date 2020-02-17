@@ -15,6 +15,7 @@ import GUI
 from argparse import RawTextHelpFormatter
 from lib.paras import paras
 from lib.common import logger
+from lib import common
 
 def parse_args():
     parser = argparse.ArgumentParser(formatter_class=RawTextHelpFormatter, description= \
@@ -136,41 +137,50 @@ class passmaker():
 
     def filter(self,string): #密码约束规则过滤
 
-        specialchar = 1
-        number = 2
-        upperletter =4
-        lowerletter =8
-        FLAG = 0
-
-        flag = 0
-        kind = 0
-        for x in string:
-            if 32 <= ord(x) <= 47 or 58<=ord(x)<=64 or 91 <= ord(x) <= 96 or 123 <= ord(x) <=126: #特殊字符
-                flag += specialchar
-                kind += 1
-            if 48 <= ord(x) <= 57: #数字
-                flag += number
-                kind += 1
-            if 65 <= ord(x) <= 90: #大写字母
-                flag += upperletter
-                kind += 1
-            if 97 <= ord(x) <= 122: #小写字母
-                flag += lowerletter
-                kind += 1
-
-        if paras.filter_rule["Nummber"]:
-            FLAG += number
-        if paras.filter_rule["Upper_letter"]:
-            FLAG += upperletter
-        if paras.filter_rule["Lower_letter"]:
-            FLAG += lowerletter
-        if paras.filter_rule["Special_char"]:
-            FLAG += specialchar
-
-        if len(string)>= paras.min_lenth and kind >= paras.kinds_needed and  (FLAG & flag == FLAG):
-            return True
-        else:
+        #第一重过滤
+        if len(string) < paras.min_lenth:#先要满足长度要求，提高过滤速度。
             return False
+
+        hasSpecialchar = False
+        hasNumber = False
+        hasUpperletter =False
+        hasLowerletter =False
+        kind = 0
+
+        if common.hasSpecialchar(string):#特殊字符
+                hasSpecialchar = True
+                kind += 1
+        if common.hasNumber(string):#数字
+                hasNumber = True
+                kind += 1
+        if common.hasUpperletter(string): #大写字母
+                hasUpperletter = True
+                kind += 1
+        if common.hasLowerletter(string): #小写字母
+                hasLowerletter = True
+                kind += 1
+
+        #第2重过滤，需要满足种类种数
+        if kind < paras.kinds_needed:
+            return False
+        else:
+            pass
+
+        # 第3重过滤，需要满足种类
+        if paras.filter_rule["Nummber"]:
+            if not hasNumber:
+                return False
+        if paras.filter_rule["Upper_letter"]:
+            if not hasUpperletter:
+                return False
+        if paras.filter_rule["Lower_letter"]:
+            if not hasLowerletter:
+                return False
+        if paras.filter_rule["Special_char"]:
+            if not hasSpecialchar:
+                return False
+
+        return True
 
     def filter_file(self,filename): # step four
         self.logger.info("Doing filter base on the password requirements ...")
