@@ -419,6 +419,7 @@ class GUI():
             listb.delete(0, END)
             listb.insert(0, filename)
 
+        #有bug
         def savetofile():
             name = tkinter.filedialog.asksaveasfile(mode='w', defaultextension=".txt")
             try:
@@ -446,7 +447,7 @@ class GUI():
             w.CloseClipboard()
         button_gen = Button(step5frame, text="Generate生成字典", command=Generate, width=18).grid(row=6, column=7)
         #button_copy = Button(step5frame, text="Copy", command=copy, width=10).grid(row=7, column=7)
-        #button_save = Button(step5frame, text="Save as\n保存为文件", command=savetofile, width=10).grid(row=8, column=7)
+        #button_save = Button(step5frame, text="Save as保存为文件", command=savetofile, width=18).grid(row=8, column=7)
         setFilter()#创建完成初始化设置个组件状态
         return step5frame
 
