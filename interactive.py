@@ -53,14 +53,14 @@ class interactive():
         #print self.__dict__
         print ("\nCurrent config values:\n")
         for a in self.__dict__:
-            print ("{0} = {1}".format(a,self.__dict__[a]))
+            print(("{0} = {1}".format(a,self.__dict__[a])))
 
     def interactive(self):
         t = tabCompleter()
         readline.set_completer_delims('\t')
         readline.parse_and_bind("tab: complete")
         readline.set_completer(t.pathCompleter)
-        print color.green + "\nWelcome to interactive mode!\n\nNotice: you can input BACK to back to upper menu in each step."
+        print(color.green + "\nWelcome to interactive mode!\n\nNotice: you can input BACK to back to upper menu in each step.")
         index = '''
         1.Step one: define the seed
         2.Step two: define the rule that to combine the seed
@@ -72,11 +72,11 @@ class interactive():
         '''
         basedir = os.path.dirname(__file__)
         while True:
-            step_choice = raw_input(index)
+            step_choice = input(index)
             if step_choice == "1":
                 print("Example : \ndomain = baidu.com,BAIDU.com\nyears = file(years.txt)\n")
                 while True:
-                    seed_input = raw_input("==>")
+                    seed_input = input("==>")
                     if seed_input.lower() == "back":
                         break
                     elif seed_input == "":
@@ -93,7 +93,7 @@ class interactive():
                                 try:
                                     value_list = open(file_name, "r").readlines()
                                 except:
-                                    print "File Not Found!"
+                                    print("File Not Found!")
                                     continue
                         else:
                             value_list = value.split(',')
@@ -105,21 +105,21 @@ class interactive():
                 print("Please input your rule,only can use seeds already defined in step one.\n"
                       "Example :\n"
                       "domain+year,domain")
-                print("already defined seeds: {0}".format(paras.seed_map.keys()))
+                print(("already defined seeds: {0}".format(list(paras.seed_map.keys()))))
                 def check_rule(rule_list):
                     tmp =[]
                     for item in paras.rule_list:
                         for x in item.split("+"):
-                            if x.strip() not in paras.seed_map.keys():
+                            if x.strip() not in list(paras.seed_map.keys()):
                                 tmp.append(x.strip)
-                                print "{0} is not in seeds,Please check".format(x.strip())
+                                print("{0} is not in seeds,Please check".format(x.strip()))
                     if len(tmp) == 0:
                         return  True
                     else:
-                        print "{0} is not in seeds,Please check and input again".format(tmp)
+                        print("{0} is not in seeds,Please check and input again".format(tmp))
                         return False
                 while True:
-                    rule_input = raw_input("==>")
+                    rule_input = input("==>")
                     if rule_input.lower() == "back":
                         break
                     elif rule_input == "":
@@ -132,7 +132,7 @@ class interactive():
                             continue
 
                 while True:
-                    order_input = raw_input("whether to keep the seed in order when combine?(Y/n)\n==>")
+                    order_input = input("whether to keep the seed in order when combine?(Y/n)\n==>")
                     if order_input.lower() == "back":
                         break
                     elif order_input.lower() in ["","y","yes"]:
@@ -148,7 +148,7 @@ class interactive():
             elif step_choice == "3":
                 print("whether to LEET or CAPS the combined result? (None/leet/caps/both)\n")
                 while True:
-                    leet_input = raw_input("==>")
+                    leet_input = input("==>")
                     if leet_input.lower() in ["",'none',"n"]:
                         paras.capitalize = False
                         paras.leet = False
@@ -166,7 +166,7 @@ class interactive():
                     elif leet_input.lower() == 'back':
                         break
                     else:
-                        print "Invalid input...."
+                        print("Invalid input....")
                         continue
 
             elif step_choice == "4":
@@ -174,7 +174,7 @@ class interactive():
                       "Example: \n"
                       "weak_password_top100.txt,weak_pass_chinese.txt\n")
                 while True:
-                    addtionalitem_input = raw_input("==>")
+                    addtionalitem_input = input("==>")
                     if addtionalitem_input.lower() == 'back':
                         break
                     elif addtionalitem_input == '':
@@ -192,7 +192,7 @@ class interactive():
             elif step_choice == "5": #filter
                 print ("Enable the filter rules to clean result?(Yes/no)\n")
                 while True:
-                    filter_input = raw_input("==>")
+                    filter_input = input("==>")
                     if filter_input.lower() in ["no","n"]:
                         paras.enable_filter = False
                         break
@@ -203,16 +203,16 @@ class interactive():
 
                         print ("The min length requirement of password\n")
                         while True:
-                            filter_options = raw_input("==>")
+                            filter_options = input("==>")
                             try:
                                 paras.min_lenth = int(filter_options)
                                 break
                             except:
                                 continue
 
-                        for item in paras.filter_rule.keys():
-                            print ("Please chose whether must contains:[{0}] ?({1})\n".format(item,'True/false' if paras.filter_rule[item] else 'False/true'))
-                            filter_options = raw_input("==>")
+                        for item in list(paras.filter_rule.keys()):
+                            print(("Please chose whether must contains:[{0}] ?({1})\n".format(item,'True/false' if paras.filter_rule[item] else 'False/true')))
+                            filter_options = input("==>")
                             if filter_options.lower() in ["t","true"]:
                                 paras.filter_rule[item] = True
                                 break
@@ -228,7 +228,7 @@ class interactive():
 
                         print ("how many kinds needed of [Upper_letter, Lower_letter, Special_char, Nummber]\n")
                         while True:
-                            filter_options = raw_input("==>")
+                            filter_options = input("==>")
                             try:
                                 x = int(filter_options)
                                 if 0<= x <= 4:
@@ -253,8 +253,8 @@ class interactive():
         return paras
 
 if __name__ == "__main__":
-    print paras
+    print(paras)
     x = interactive()
     #x.print_paras()
-    print x.interactive()
+    print(x.interactive())
     #x.print_paras()

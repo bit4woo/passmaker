@@ -25,7 +25,7 @@ def strip_list(inputlist):
             resultlist.append(x)
         return resultlist
     else:
-        print "The input should be a list"
+        print("The input should be a list")
 
 def hasSpecialchar(string):
     if string is None or len(string) == 0:

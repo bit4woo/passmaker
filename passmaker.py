@@ -82,7 +82,7 @@ class passmaker():
             fp.writelines("\n".join(write_list))
             fp.close()
             return 0
-        except Exception,e:
+        except Exception as e:
             self.logger.error(e)
             return 1
 
@@ -127,8 +127,8 @@ class passmaker():
                     else:
                         raise Exception("No \"{0}\" found, Please check your config!".format(i))
 
-            except Exception,e:
-                print e
+            except Exception as e:
+                print(e)
                 exit(0)
             #begin write file
             self.write_add(filename,resultlist)
@@ -218,7 +218,7 @@ class passmaker():
         fpr = open(filename, "r")
         for item in fpr.readlines():
             for x in item.strip():
-                if x in paras.leet_rule.keys():
+                if x in list(paras.leet_rule.keys()):
                     leeted = item.strip().replace(x,paras.leet_rule[x])
                     tmplist.append(leeted)
         self.write_add(filename,tmplist)
@@ -233,7 +233,7 @@ class passmaker():
                     tmplist.append(it.strip("\n").strip("\r"))
                 self.write_add(filename,tmplist)
     def run(self):
-        if paras.seed_map.keys()>=2 and len(paras.rule_list) >=1:
+        if list(paras.seed_map.keys())>=2 and len(paras.rule_list) >=1:
             file = self.passmaker()
             if paras.capitalize:
                 self.caps(file)

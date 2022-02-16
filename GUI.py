@@ -3,10 +3,10 @@
 __author__ = 'bit4woo'
 __github__ = 'https://github.com/bit4woo'
 
-from Tkinter import *
+from tkinter import *
 from lib.common import logger,strip_list
 from lib.paras import paras
-import tkFileDialog
+import tkinter.filedialog
 import passmaker
 import os
 
@@ -41,7 +41,7 @@ class GUI():
 
         def show_seeds():
             listb.delete(0, END)
-            for item in paras.seed_map.keys():
+            for item in list(paras.seed_map.keys()):
                 listb.insert(0, "{0} : {1}".format(item,paras.seed_map[item]))
 
         def addseed():
@@ -61,7 +61,7 @@ class GUI():
                 paras.seed_map.pop(key)
                 show_seeds()
                 self.logger.info("seed {0} deleted".format(key))
-            except Exception, e:
+            except Exception as e:
                 self.logger.error(e)
 
         def editseed():
@@ -74,17 +74,17 @@ class GUI():
                 paras.seed_map.pop(key)
                 show_seeds()
                 self.logger.info("Editing seed {0} ".format(key))
-            except Exception, e:
+            except Exception as e:
                 self.logger.error(e)
 
         def chosefile():
-            filename = tkFileDialog.askopenfilename(filetypes=[('txt', '*.txt')])
+            filename = tkinter.filedialog.askopenfilename(filetypes=[('txt', '*.txt')])
             try:
                 tmplist = open(filename, "r").readlines()
                 tmplist = strip_list(tmplist)
                 seed_value.set(",".join(tmplist))
             except:
-                print('Could not open File:%s' % filename)
+                print(('Could not open File:%s' % filename))
 
         def showhelp():
             pass
@@ -128,8 +128,8 @@ class GUI():
 
         def check_rule(rule):
             for x in rule.split("+"):
-                if x.strip() not in paras.seed_map.keys():
-                    print "{0} is not in seeds,Please check".format(x.strip())
+                if x.strip() not in list(paras.seed_map.keys()):
+                    print("{0} is not in seeds,Please check".format(x.strip()))
                     return False
             return True
 
@@ -151,7 +151,7 @@ class GUI():
                 paras.rule_list.remove(x)
                 show_rule()
                 self.logger.info("rule {0} deleted".format(x))
-            except Exception, e:
+            except Exception as e:
                 self.logger.error(e)
 
         def editrule():
@@ -160,7 +160,7 @@ class GUI():
                 paras.rule_list.remove(x)
                 show_rule()
                 self.logger.info("Editing rule {0} ".format(x))
-            except Exception, e:
+            except Exception as e:
                 self.logger.error(e)
 
         button_add = Button(step2frame, text="Add", command=addrule, width=10).grid(row=2, column=7)
@@ -216,7 +216,7 @@ class GUI():
 
         def show_leet_rule():
             listb.delete(0, END)
-            for item in paras.leet_rule.keys():
+            for item in list(paras.leet_rule.keys()):
                 listb.insert(0, item + ":" + paras.leet_rule[item])
 
         def addLeetRule():
@@ -235,7 +235,7 @@ class GUI():
                 paras.leet_rule.pop(key)
                 show_leet_rule()
                 self.logger.info("leet rule {0} deleted".format(x))
-            except Exception, e:
+            except Exception as e:
                 self.logger.error(e)
 
         def editLeetRule():
@@ -246,11 +246,11 @@ class GUI():
                 paras.leet_rule.pop(key)
                 show_leet_rule()
                 self.logger.info("Editing leet rule {0} ".format(x))
-            except Exception, e:
+            except Exception as e:
                 self.logger.error(e)
 
         def chosefile():
-            filename = tkFileDialog.askopenfilename(filetypes=[('txt', '*.txt')])
+            filename = tkinter.filedialog.askopenfilename(filetypes=[('txt', '*.txt')])
             try:
                 tmplist = open(filename, "r").readlines()
                 tmplist = strip_list(tmplist)
@@ -259,7 +259,7 @@ class GUI():
                     value = item.split(":")[1]
                     paras.leet_rule[key]= value
                 show_leet_rule()
-            except Exception,e:
+            except Exception as e:
                 self.logger('Error: {0} occurs when loading {1}'.format(e,filename))
 
         button_chosefile = Button(step3frame, text="Load file", command=chosefile, width=10)
@@ -303,18 +303,18 @@ class GUI():
                 paras.additional_list.remove(x)
                 show_additional_file()
                 self.logger.info("leet rule {0} deleted".format(x))
-            except Exception, e:
+            except Exception as e:
                 self.logger.error(e)
 
         def chosefile():
-            filename = tkFileDialog.askopenfilename(filetypes=[('txt', '*.txt')])
+            filename = tkinter.filedialog.askopenfilename(filetypes=[('txt', '*.txt')])
             try:
                 if filename not in paras.additional_list:
                     paras.additional_list.append(filename)
                     leet_rule.set(filename)
                     show_additional_file()
                     self.logger.info('Additional password file {0} added'.format(filename))
-            except Exception,e:
+            except Exception as e:
                 self.logger.info('Error: {0} occurs when loading {1}'.format(e,filename))
 
         button_chosefile = Button(step4frame, text="Load file", command=chosefile, width=10).grid(row=1, column=7)
@@ -412,16 +412,16 @@ class GUI():
                 listb.insert(0, item)
 
         def savetofile():
-            name = tkFileDialog.asksaveasfile(mode='w', defaultextension=".txt")
+            name = tkinter.filedialog.asksaveasfile(mode='w', defaultextension=".txt")
             try:
                 name.writelines(self.result)
             except:
-                print('Could not open File:%s' % name)
+                print(('Could not open File:%s' % name))
 
         def Generate():
             paras.kinds_needed = kinds.get()
             paras.min_lenth = length.get()
-            print paras
+            print(paras)
             filename = passmaker.passmaker().run()
             if filename:
                 show_password(filename)
@@ -505,4 +505,4 @@ class GUI():
 
 if __name__ == "__main__":
     GUI()
-    print paras
+    print(paras)

@@ -55,4 +55,4 @@ kinds_needed = 3  # 四者包含其三
 
 
 if __name__ =="__main__":
-    print type(keyboard_walk)
+    print(type(keyboard_walk))

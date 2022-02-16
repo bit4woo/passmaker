@@ -40,8 +40,8 @@ class AttribDict(dict):
 
         try:
             return self.__getitem__(item)
-        except Exception,e:
-            print e
+        except Exception as e:
+            print(e)
 
     def __setattr__(self, item, value):
         """
@@ -76,7 +76,7 @@ class AttribDict(dict):
                 if not isinstance(value, (types.BuiltinFunctionType, types.FunctionType, types.MethodType)):
                     setattr(retVal, attr, copy.deepcopy(value, memo))
 
-        for key, value in self.items():
+        for key, value in list(self.items()):
             retVal.__setitem__(key, copy.deepcopy(value, memo))
 
         return retVal

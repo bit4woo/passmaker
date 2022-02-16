@@ -2,3 +2,4 @@
 .idea/
 *.pyc
 passmaker*.txt
+/venv/

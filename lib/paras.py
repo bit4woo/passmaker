@@ -51,4 +51,4 @@ if __name__ == "__main__":
     paras.path = "xxx"
     paras.xxx = {"a":1,"b":2}
     paras.path = "yyy"
-    print paras
+    print(paras)
