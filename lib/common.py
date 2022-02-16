@@ -10,7 +10,7 @@ def logger():
     LOGGER = logging.getLogger("PassMakerLog")
     LOGGER_HANDLER = logging.StreamHandler(sys.stdout)
 
-    FORMATTER = logging.Formatter("\r[%(asctime)s] [%(levelname)s] %(message)s", "%H:%M:%S")
+    FORMATTER = logging.Formatter("\r[%(asctime)s] [%(levelname)s] [%(pathname)s %(filename)s %(funcName)s %(lineno)s] %(message)s", "%H:%M:%S")
 
     LOGGER_HANDLER.setFormatter(FORMATTER)
     LOGGER.addHandler(LOGGER_HANDLER)

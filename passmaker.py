@@ -76,7 +76,7 @@ class passmaker():
 
     def write_add(self,filename,write_list):
         try:
-            fp = open(filename,"ab+")
+            fp = open(filename,"a+") #a = append 追加
             if len(fp.readlines()) !=0:
                 fp.write("\n")
             fp.writelines("\n".join(write_list))
@@ -112,13 +112,19 @@ class passmaker():
         for item in rulelist: #item 是一个规则,类型是元组
             #print item
             try:
-                for i in item: #解析一个规则，i是seed,单个组成部分
-                    if i in paras.seed_map: #seed 是否有在config中定义
+                for seedKey in item: #解析一个规则，i是seed,单个组成部分
+                    if seedKey in paras.seed_map: #seed 是否有在config中定义
+                        seedValue = paras.seed_map[seedKey]
+                        if isinstance(seedValue, str) and os.path.exists(seedValue):
+                            seedValueList = open(seedValue,"r").readlines()
+                        else:
+                            seedValueList = seedValue
+
                         if len(resultlist) == 0:
-                            resultlist = paras.seed_map[i]
+                            resultlist = seedValueList
                         else:
                             for x in resultlist:
-                                for y in paras.seed_map[i]:
+                                for y in seedValueList:
                                     y = y.strip()
                                     templist.append(x+y)
                             #print resultlist
@@ -193,7 +199,7 @@ class passmaker():
 
         tmplist = list(set(tmplist)) #去重
 
-        fpw = open(filename, "wb")#这里要覆盖写入
+        fpw = open(filename, "w")#这里要覆盖写入
         fpw.writelines("\n".join(tmplist))
         fpw.close()
 
@@ -233,7 +239,7 @@ class passmaker():
                     tmplist.append(it.strip("\n").strip("\r"))
                 self.write_add(filename,tmplist)
     def run(self):
-        if list(paras.seed_map.keys())>=2 and len(paras.rule_list) >=1:
+        if len(paras.seed_map.keys()) >= 2 and len(paras.rule_list) >= 1:
             file = self.passmaker()
             if paras.capitalize:
                 self.caps(file)

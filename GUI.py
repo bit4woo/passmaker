@@ -22,7 +22,7 @@ class GUI():
         step1frame = Frame(root, highlightbackground="black", highlightcolor="black", highlightthickness=2)
         #step1frame.pack()
 
-        label_seed_name = Label(step1frame, text="Step one(Define seeds that use to combine to password):",width=120)
+        label_seed_name = Label(step1frame, text=u"Step one(Define seeds that use to combine to password)\n第一步：定义用于构造密码的种子字典",width=120)
         label_seed_name.grid(row=0, column=0,columnspan=7)
 
         seed_name = StringVar()
@@ -47,11 +47,15 @@ class GUI():
         def addseed():
             key = seed_name_input.get()
             value = seed_value_input.get()
-            value_list = value.split(",")
+
             if key != "" and value != "":
-                paras.seed_map[key] = value_list
+                if os.path.exists(value):
+                    paras.seed_map[key] = value #显示文件路径
+                else:
+                    value_list = value.split(",")
+                    paras.seed_map[key] = value_list #直接显示字典列表
                 show_seeds()
-                self.logger.info("seed {0} : {1}added".format(key,value_list))
+                self.logger.info("seed {0} : {1} added".format(key,value))
 
         def delseed():
             try:
@@ -70,7 +74,12 @@ class GUI():
                 key = x.split(":")[0].strip()
                 value = paras.seed_map[key]
                 seed_name.set(key)
-                seed_value.set(",".join(value))
+
+                if isinstance(value, str) and os.path.exists(value): # 显示文件路径
+                    seed_value.set(value)
+                else:
+                    seed_value.set(",".join(value))
+
                 paras.seed_map.pop(key)
                 show_seeds()
                 self.logger.info("Editing seed {0} ".format(key))
@@ -80,9 +89,9 @@ class GUI():
         def chosefile():
             filename = tkinter.filedialog.askopenfilename(filetypes=[('txt', '*.txt')])
             try:
-                tmplist = open(filename, "r").readlines()
+                tmplist = open(filename, "r").readlines(10)
                 tmplist = strip_list(tmplist)
-                seed_value.set(",".join(tmplist))
+                seed_value.set(filename)
             except:
                 print(('Could not open File:%s' % filename))
 
@@ -104,7 +113,7 @@ class GUI():
         step2frame = Frame(root, highlightbackground="black", highlightcolor="black", highlightthickness=2)
         #step2frame.pack()
 
-        label_seed_name = Label(step2frame, text="Step Two(Define rules that how to combine seeds):",width=120)
+        label_seed_name = Label(step2frame, text=u"Step Two(Define rules that how to combine seeds)\n第二步：定义组合拼接规则",width=120)
         label_seed_name.grid(row=0, column=0, columnspan=7)
 
         def updatePara():
@@ -113,10 +122,11 @@ class GUI():
 
         isKeepOrder = BooleanVar()
         isKeepOrder.set(paras.keep_in_order)
-        keepInOrder = Checkbutton(step2frame, text="Keep same order withe rule when combine", variable=isKeepOrder,command= updatePara)
+        keepInOrder = Checkbutton(step2frame, text=u"Keep same order withe rule when combine\n是否按照规则顺序进行组合", variable=isKeepOrder,command= updatePara)
         keepInOrder.grid(row=1, column=0)
 
-
+        showSeedNames = Label(step2frame, text=u"Vaild seeds可用种子：\n"+str(list(paras.seed_map.keys())))
+        showSeedNames.grid(row=1, column=1)
         rule = StringVar()
         rule_input = Entry(step2frame, textvariable=rule, width=20 * 6)
         rule.set("rule")
@@ -175,7 +185,7 @@ class GUI():
         step3frame = Frame(root, highlightbackground="black", highlightcolor="black", highlightthickness=2)
         #step3frame.pack()
 
-        label_seed_name = Label(step3frame, text="Step Three(Set leet and caps config):",width=120)
+        label_seed_name = Label(step3frame, text="Step Three(Set leet and caps config)\n第三步：变形和大小写设置",width=120)
         label_seed_name.grid(row=0, column=0,columnspan=7)
 
         def updatePara():
@@ -183,7 +193,7 @@ class GUI():
             #print paras
         isEnabledCaps = BooleanVar()
         isEnabledCaps.set(paras.capitalize)
-        EnableCaps = Checkbutton(step3frame, text="Enable Caps First Letter", variable=isEnabledCaps, command= updatePara)
+        EnableCaps = Checkbutton(step3frame, text="Enable Caps First Letter\n将首字母转为大写", variable=isEnabledCaps, command= updatePara)
         EnableCaps.grid(row=1, column=0)
 
         def Leet():
@@ -201,7 +211,7 @@ class GUI():
 
         isEnabledLeet = BooleanVar()
         isEnabledLeet.set(paras.leet)
-        EnableLeet = Checkbutton(step3frame, text="Enable Leet", variable=isEnabledLeet,command=Leet )
+        EnableLeet = Checkbutton(step3frame, text="Enable Leet\n启用变形", variable=isEnabledLeet,command=Leet )
         EnableLeet.grid(row=1, column=1)
 
 
@@ -280,7 +290,7 @@ class GUI():
         step4frame = Frame(root, highlightbackground="black", highlightcolor="black", highlightthickness=2)
         #step3frame.pack()
 
-        label_seed_name = Label(step4frame, text="Step Four(Add Additional password file):",width=120)
+        label_seed_name = Label(step4frame, text="Step Four(Add Additional password file)\n第四步：添加额外常用密码字典文件",width=120)
         label_seed_name.grid(row=0, column=0,columnspan =7)
 
         leet_rule = StringVar()
@@ -328,7 +338,7 @@ class GUI():
         #######################step three frame########################################
         step5frame = Frame(root, highlightbackground="black", highlightcolor="black", highlightthickness=2)
 
-        label_seed_name = Label(step5frame, text="Step Five(Define filter rule and Run Generation):",width=120)
+        label_seed_name = Label(step5frame, text="Step Five(Define filter rule and Run Generation)\n第五步：定义过滤规则并生成字典",width=120)
         label_seed_name.grid(row=0, column=0,columnspan=7)
 
         def setFilter():
@@ -351,7 +361,7 @@ class GUI():
             #paras.filter_rule.Upper_letter = Upper_letter.get()
             #print paras
         enable_filter = BooleanVar()
-        filter= Checkbutton(step5frame, text="Enable Filter", variable=enable_filter,command = setFilter)
+        filter= Checkbutton(step5frame, text="Enable Filter\n启用过滤", variable=enable_filter,command = setFilter)
         enable_filter.set(paras.enable_filter)
         filter.grid(row=1, column=0)
 
@@ -360,32 +370,32 @@ class GUI():
             #paras.filter_rule.Upper_letter = Upper_letter.get()
             #print paras
         Upper_letter = BooleanVar()
-        Upper= Checkbutton(step5frame, text="Need Upper Letter in password", variable=Upper_letter,command = setUpper)
+        Upper= Checkbutton(step5frame, text="Need Upper Letter in password\n密码中需要包含大写字母", variable=Upper_letter,command = setUpper)
         Upper_letter.set(paras.filter_rule["Upper_letter"])
         Upper.grid(row=2, column=0)
 
         def setLower():
             paras.filter_rule["Lower_letter"] = Lower_letter.get()
         Lower_letter = BooleanVar()
-        Lower= Checkbutton(step5frame, text="Need Lower Letter in password", variable=Lower_letter,command = setLower)
+        Lower= Checkbutton(step5frame, text="Need Lower Letter in password\n密码中需要包含小写字母", variable=Lower_letter,command = setLower)
         Lower_letter.set(paras.filter_rule["Lower_letter"])
         Lower.grid(row=2, column=1)
 
         def setSpecial():
             paras.filter_rule["Special_char"] = Special_char.get()
         Special_char = BooleanVar()
-        Special= Checkbutton(step5frame, text="Need Special Char in password", variable=Special_char,command = setSpecial)
+        Special= Checkbutton(step5frame, text="Need Special Char in password\n密码中需要包含特殊字符", variable=Special_char,command = setSpecial)
         Special_char.set(paras.filter_rule["Special_char"])
         Special.grid(row=3, column=0)
 
         def setNumber():
             paras.filter_rule["Nummber"] = Nummber.get()
         Nummber = BooleanVar()
-        Num= Checkbutton(step5frame, text="Need Number in password", variable=Nummber,command = setNumber)
+        Num= Checkbutton(step5frame, text="Need Number in password\n密码中需要包含数字", variable=Nummber,command = setNumber)
         Nummber.set(paras.filter_rule["Nummber"])
         Num.grid(row=3, column=1)
 
-        lengthLabel = Label(step5frame, text="Min Length of password")
+        lengthLabel = Label(step5frame, text="Min Length of password\n密码的最小长度要求")
         lengthLabel.grid(row=4, column=0)
 
         length = IntVar()
@@ -393,7 +403,7 @@ class GUI():
         length.set(paras.min_lenth)
         length_input.grid(row=4, column=1)
 
-        kindsLabel = Label(step5frame, text="How Many Kinds Needed (Upper Letter、Lower Letter、Special Char、Number)")
+        kindsLabel = Label(step5frame, text="How Many Kinds Needed (Upper Letter、Lower Letter、Special Char、Number)\n密码的最小字符种类（大写字母、小写字母、特殊符号、数字）")
         kindsLabel.grid(row=5, column=0)
 
         kinds = IntVar()
@@ -407,9 +417,7 @@ class GUI():
 
         def show_password(filename):
             listb.delete(0, END)
-            self.result = open(filename,"r").readlines()
-            for item in self.result:
-                listb.insert(0, item)
+            listb.insert(0, filename)
 
         def savetofile():
             name = tkinter.filedialog.asksaveasfile(mode='w', defaultextension=".txt")
@@ -423,9 +431,12 @@ class GUI():
             paras.min_lenth = length.get()
             print(paras)
             filename = passmaker.passmaker().run()
+
             if filename:
-                show_password(filename)
-                logger().info("Password file: {0}".format(os.path.join(os.getcwd(), filename)))
+                fullName = os.path.join(os.getcwd(), filename)
+                show_password(fullName)
+                logger().info("Password file: {0}".format(fullName))
+
         def copy():
             import win32clipboard as w
             import win32con
@@ -433,9 +444,9 @@ class GUI():
             w.EmptyClipboard()
             w.SetClipboardData(win32con.CF_TEXT, "".join(self.result))
             w.CloseClipboard()
-        button_add = Button(step5frame, text="Generate", command=Generate, width=10).grid(row=6, column=7)
-        button_del = Button(step5frame, text="Copy", command=copy, width=10).grid(row=7, column=7)
-        button_edit = Button(step5frame, text="Save as", command=savetofile, width=10).grid(row=8, column=7)
+        button_gen = Button(step5frame, text="Generate生成字典", command=Generate, width=18).grid(row=6, column=7)
+        #button_copy = Button(step5frame, text="Copy", command=copy, width=10).grid(row=7, column=7)
+        #button_save = Button(step5frame, text="Save as\n保存为文件", command=savetofile, width=10).grid(row=8, column=7)
         setFilter()#创建完成初始化设置个组件状态
         return step5frame
 
@@ -453,8 +464,8 @@ class GUI():
             self.showStepFrame(root)
 
         controlFrame = Frame(root)
-        button_pre = Button(controlFrame, text="Previous", command=pristep, width=10).grid(row=22, column=2)
-        button_edit = Button(controlFrame, text="Next", command=nextstep, width=10).grid(row=22, column=4)
+        button_pre = Button(controlFrame, text="Previous上一步", command=pristep, width=12).grid(row=22, column=2)
+        button_next = Button(controlFrame, text="Next下一步", command=nextstep, width=12).grid(row=22, column=4)
         return controlFrame
 
     def showStepFrame(self,root):

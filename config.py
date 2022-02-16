@@ -6,8 +6,8 @@ __github__ = 'https://github.com/bit4woo'
 
 #第一步，定义种子（seed），密码的基本组成部分，必须是字典类型
 domain= ["baidu.com","badidu"]
-year = ["2018","2019","2020"]
-special_letter = ["!","@","#","$","%",]
+year = ["2020","2021","2022"]
+special_letter = ["!","@","#","$","%"]
 keyboard_walk = open('./seed/4_keyboard_walk.txt').readlines()
 common_number = open('./seed/common_number.txt').readlines()
 chinese_last_name = open('./seed/Chinese_last_name_top100.txt').readlines()
