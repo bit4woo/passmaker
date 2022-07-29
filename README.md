@@ -103,7 +103,17 @@ kinds_needed = 3  # 四者包含其三
 
 通过运行`python passmaker.py -g` 来启用图形界面配置其中参数，然后运行生成密码字典。
 
-![screnshot_gui](doc/screnshot_gui.png)
+![image-20220729182813850](README.assets/image-20220729182813850.png)
+
+![image-20220729182925355](README.assets/image-20220729182925355.png)
+
+![image-20220729182941113](README.assets/image-20220729182941113.png)
+
+![image-20220729183024073](README.assets/image-20220729183024073.png)
+
+![image-20220729183108447](README.assets/image-20220729183108447.png)
+
+
 
 ### 0x3、作者
 
