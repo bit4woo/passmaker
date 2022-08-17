@@ -9,12 +9,14 @@ from lib.paras import paras
 import tkinter.filedialog
 import passmaker
 import os
+import sys
 
 class GUI():
     def __init__(self):
         self.logger = logger()
         self.step = 1
         self.result=[]
+        self.resultFile=""
         self.createWidgets()
 
     def step1frame(self,root):
@@ -423,9 +425,10 @@ class GUI():
         def savetofile():
             name = tkinter.filedialog.asksaveasfile(mode='w', defaultextension=".txt")
             try:
-                name.writelines(self.result)
+                shutil.copyfile(self.resultFile, name)
             except:
-                print(('Could not open File:%s' % name))
+                print(('Can not save File:%s' % name))
+
 
         def Generate():
             paras.kinds_needed = kinds.get()
@@ -435,6 +438,7 @@ class GUI():
 
             if filename:
                 fullName = os.path.join(os.getcwd(), filename)
+                resultFile = fullName
                 show_password(fullName)
                 logger().info("Password file: {0}".format(fullName))
 
@@ -443,11 +447,29 @@ class GUI():
             import win32con
             w.OpenClipboard()
             w.EmptyClipboard()
-            w.SetClipboardData(win32con.CF_TEXT, "".join(self.result))
+            w.SetClipboardData(win32con.CF_TEXT, self.resultFile)
             w.CloseClipboard()
+
+        def openfile():
+            try:
+                if " " in self.resultFile:
+                    filename = '"{0}"'.format(self.resultFile)
+                else:
+                    filename = self.resultFile
+
+                if sys.platform.startswith('darwin'):
+                    os.system("open {0}".format(filename))
+                elif sys.platform.startswith('win'):
+                    os.system("explorer {0}".format(filename))
+                else:
+                    os.system("open {0}".format(filename))
+            except Exception as e:
+                print(e)
+                print('Can not open File')
         button_gen = Button(step5frame, text="Generate生成字典", command=Generate, width=18).grid(row=6, column=7)
-        #button_copy = Button(step5frame, text="Copy", command=copy, width=10).grid(row=7, column=7)
-        #button_save = Button(step5frame, text="Save as保存为文件", command=savetofile, width=18).grid(row=8, column=7)
+        button_copy = Button(step5frame, text="Ctrl+C To Copy复制文件名", command=copy, width=18).grid(row=7, column=7)
+        button_save = Button(step5frame, text="Save as保存为文件", command=savetofile, width=18).grid(row=8, column=7)
+        button_open = Button(step5frame, text="Open打开文件", command=openfile, width=18).grid(row=9, column=7)
         setFilter()#创建完成初始化设置个组件状态
         return step5frame
 
