@@ -3,3 +3,4 @@
 *.pyc
 passmaker*.txt
 /venv/
+.DS_Store
