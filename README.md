@@ -1,3 +1,7 @@
+Java版本：
+
+<https://github.com/bit4woo/passmaker_java>
+
 # passmaker
 
 项目地址：<https://github.com/bit4woo/passmaker>
